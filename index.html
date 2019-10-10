@@ -15,7 +15,7 @@
 
 <body>
 
-  <header class="header">
+  <header class="header" id="header">
     <div class="container">
 
     </div>
@@ -39,11 +39,33 @@
     </div>
   </section>
 
-  <footer class="footer">
+  <footer class="footer" id="footer">
     <div class="container">
 
     </div>
   </footer>
+
+  <!-- popup template -->
+  <button data-popup=".popup_1" class="btn">start popup 1</button>
+  <div class="popup popup_1 popup-width--mobile">
+      <header class="popup__header">
+          <span>Загаловок попапа</span>
+          <button class="popup__btn__close"></button>
+      </header>
+      <main class="popup__main">
+          <h2 class="popup__title">title popup_1</h2>
+          <p class="popup__subtitle">
+              Мы подберем спортивные базы и услуги и свяжемся c Вами
+          </p>
+          <p>some text</p>
+      </main>
+      <footer class="popup__footer">
+          <button class="popup__footer__btn__ok">Ok</button>
+      </footer>
+  </div>
+  <div class="overlay"></div>
+  <!-- end popup template -->
+
 
   <script defer src="./js/modernizr-custom.js"></script>
   <script defer src="./js/main.js"></script>
