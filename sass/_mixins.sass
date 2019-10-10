@@ -1,0 +1,6 @@
+@mixin size($n)
+  width: calc(100% / 12 * #{$n} - 30px)
+
+@mixin size-from($px, $n)
+  @media screen and (max-width: $px)
+    @include size($n)

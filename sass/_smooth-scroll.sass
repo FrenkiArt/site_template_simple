@@ -1,0 +1,27 @@
+.scroll_top
+    position: fixed
+    bottom: 10px
+    right: 10px
+    visibility: hidden
+    opacity: 0
+    border-radius: 100%
+    width: 100px
+    height: 100px
+    transition: visibility 0.3s, opacity 0.3s, bottom 0.7s
+    border: 0
+    padding: 0
+    outline-color: transparent
+    background-color: #ffffff
+    display: flex
+    justify-content: center
+    align-items: center
+    text-decoration: none
+    color: #000000
+    &:focus
+        border: 1px solid green
+        outline: 0px solid transparent
+    &.visible
+        visibility: visible
+        opacity: 1
+    &.fixed_on_footer
+        // bottom: 50px
