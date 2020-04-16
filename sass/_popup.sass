@@ -116,7 +116,12 @@ body,html
     left: 0
     opacity: 0
     visibility: hidden
-    transition: visibility 0.3s, opacity 0.3s
+    transition: visibility 0.3s, opacity 0.3s, transform 0.3s, border-radius 0.3s
+    transform: scale(0)
+    border-radius: 100%
+
     &.popup_open
         visibility: visible
         opacity: 1
+        transform: scale(1)
+        border-radius: 0%
