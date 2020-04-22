@@ -289,11 +289,10 @@ function bgClick(selector) {
         newCircle.classList.add('bg_ripple');
         item.appendChild(newCircle);
         // Узнаём позицию мышки внутри элемента и заносим в атрибуты
-        newCircle.style.left = (e.clientX - e.target.closest(selector).offsetLeft) + 'px';
-        newCircle.style.top = (e.clientY - e.target.closest(selector).offsetTop) + 'px';
+        newCircle.style.left = (e.clientX - e.target.closest(selector).getBoundingClientRect().left) + 'px';
+        newCircle.style.top = (e.clientY - e.target.closest(selector).getBoundingClientRect().top) + 'px';
         newCircle.style.animation = 'bg_ripple 0.7s ease-out 0s 1 forwards';
         newCircle.addEventListener('animationend', () => {
-          //circle.style.animation = '';
           newCircle.remove();
         })
       })
@@ -301,5 +300,86 @@ function bgClick(selector) {
   }
 }
 
+/* делаем печатающий текст */
+document.querySelector('.btn_trig').addEventListener('click', (e) => {
+  let blockText = document.querySelector('.print_text');
+  //let contentBlockText = blockText.textContent.trim();
+  let contentBlockText1 = blockText.dataset.text1;
+  let contentBlockText2 = blockText.dataset.text2;
+  let contentBlockText3 = blockText.dataset.text3;
+  blockText.textContent = '';
+  let span_1 = document.createElement('span');
+  let span_2 = document.createElement('span');
+  span_2.classList.add('animeRipple');
+  let timeInterval = 50;
+  let timeTimeout = 3000;
+
+  let timeStartText2 = (timeInterval * contentBlockText1.length)*2+timeTimeout+2000;
+  let timeStartText3 = timeStartText2*2;
+
+  span_2.textContent = '|';
+
+  blockText.appendChild(span_1);
+  blockText.appendChild(span_2);
+
+  showText(contentBlockText1);
+  setTimeout(() => {
+    showText(contentBlockText2);
+  }, timeStartText2);
+  setTimeout(() => {
+    showText(contentBlockText3);
+  }, timeStartText3);
+  setTimeout(() => {
+    span_2.remove();
+  }, timeStartText2*3);
+
+  function showText (text) {
+    let counter = 1;
+    let timer = setInterval( () => {
+      span_1.textContent = text.slice(0, counter);
+      if (counter > text.length) {
+        clearInterval(timer);
+        //span_2.remove();
+        //counter = 1;
+        console.log('Первый текст готов');
+        setTimeout(() => {
+          removeText(text, counter);
+        }, timeTimeout);
+      }
+      counter++;
+    }, timeInterval);
+  }
+  function removeText (text, counter) {
+    let timer = setInterval( () => {
+      span_1.textContent = text.slice(0, counter);
+      if (counter < 1) {
+        clearInterval(timer);
+        //span_2.remove();
+        counter = 1;
+      }
+      counter--;
+    }, timeInterval);
+  }
+
+})
+
+/* Попытка разделить блок по строкам */
+
+let myvar = document.querySelector('.block_rows').innerHTML.trim();
+myvar = myvar.split('<br>');
+document.querySelector('.block_rows').innerHTML = '';
+
+let counter = 0;
+let timer = setInterval( () => {
+  if (counter > myvar.length) {
+    clearInterval(timer);
+  }
+  let div = document.createElement('div');
+  div.classList.add('show_row');
+  let br = document.createElement('br');
+  div.textContent = myvar[counter];
+  document.querySelector('.block_rows').appendChild(div);
+  counter++;
+}, 300);
 
 console.info(`js загружен полностью!`);

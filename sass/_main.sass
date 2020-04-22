@@ -41,3 +41,24 @@ input[type='submit'], button
 
 .webp
   pointer-events: auto
+
+.animeRipple
+  animation: animeRipple 0.3s ease-in 0s infinite alternate
+
+@keyframes animeRipple
+  0%
+    opacity: 0
+  100%
+    opacity: 1
+
+.show_row
+  animation: show_row 0.7s cubic-bezier(0,1.26,.99,1.06) 0.5s 1 forwards
+  opacity: 0
+
+@keyframes show_row
+  0%
+    opacity: 0
+    transform: translate(0, 150px)
+  100%
+    opacity: 1
+    transform: translate(0, 0px)
