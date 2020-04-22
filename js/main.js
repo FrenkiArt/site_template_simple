@@ -3,6 +3,7 @@ myPopup(document.querySelectorAll('[data-popup]'));
 my_tel_masker(document.querySelectorAll('input[type=tel]'));
 sendMail(document.querySelectorAll('form'));
 smoothScroll();
+bgClick('[data-bg-click]');
 
 /* document.documentElement.classList.remove("no-js"); */
 let eventClick = new MouseEvent('click');
@@ -230,7 +231,7 @@ function smoothScroll() {
 
   function from_ancor_to_target(e) {
     e.preventDefault();
-    ancor = e.target;
+    ancor = e.target.closest('a[href*="#"]');
     ancor_href_target = ancor.getAttribute('href');
     ancor_href_target = document.querySelector(ancor_href_target);
     start_location = window.pageYOffset;
@@ -275,5 +276,30 @@ function smoothScroll() {
     }
   }
 }
+
+function bgClick(selector) {
+  /* Эффект капли на заднем фоне */
+  if (document.querySelector(selector)) { // Проверка на существование таких объектов
+    document.querySelectorAll(selector).forEach((item) => {
+      item.style.position = 'relative';
+      item.style.overflow = 'hidden';
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        let newCircle = document.createElement('div');
+        newCircle.classList.add('bg_ripple');
+        item.appendChild(newCircle);
+        // Узнаём позицию мышки внутри элемента и заносим в атрибуты
+        newCircle.style.left = (e.clientX - e.target.closest(selector).offsetLeft) + 'px';
+        newCircle.style.top = (e.clientY - e.target.closest(selector).offsetTop) + 'px';
+        newCircle.style.animation = 'bg_ripple 0.7s ease-out 0s 1 forwards';
+        newCircle.addEventListener('animationend', () => {
+          //circle.style.animation = '';
+          newCircle.remove();
+        })
+      })
+    })
+  }
+}
+
 
 console.info(`js загружен полностью!`);
