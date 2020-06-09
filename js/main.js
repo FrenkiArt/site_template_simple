@@ -110,20 +110,74 @@ function lazyLoading() {
 }
 
 function my_tel_masker(all_phone_selector_array) {
+  let temp = '+7(___)__-__-___';
+
   all_phone_selector_array.forEach(function (item) {
-    item.addEventListener('keydown', inputCheck);
+    item.maxLength = temp.length;
+    item.addEventListener('keydown', keydownCheck);
+    item.addEventListener('input', inputCheck);
   });
 
-  function inputCheck(e) {
-    if ((e.keyCode > 48 && e.keyCode < 58) || (e.keyCode > 95 && e.keyCode < 106) || (e.keyCode === 48) || (e.keyCode === 107) || (e.keyCode === 109)) {
-      /* goodInput += String.fromCharCode(e.charCode);
-      e.target.value = goodInput; */
-    } else if ((e.keyCode === 8) || (e.keyCode === 46) || (e.keyCode === 37) || (e.keyCode === 39) || (e.keyCode === 32)) {} else {
+  function keydownCheck(e) {
+    e.target.dataset.keycode = e.keyCode;
+    if ((e.keyCode > 48 && e.keyCode < 58) || (e.keyCode > 95 && e.keyCode < 106) || (e.keyCode === 48) || (e.keyCode === 107) || (e.keyCode === 109) || (e.keyCode === 17)) {
+      //...
+    } else if ((e.keyCode === 8) || (e.keyCode === 46) || (e.keyCode === 37) || (e.keyCode === 39) || (e.keyCode === 32)) {
+      //...
+    } else if ((e.keyCode === 86) && e.ctrlKey) {
+      //...Позволяем вставку
+    } else {
       e.preventDefault();
     }
     //console.log(e.keyCode);
   }
-  //String.fromCharCode(e.keyCode || e.charCode)
+
+  function inputCheck(e) {
+    let textArray = e.target.value.split('');
+
+    if (textArray[0] == '+') {
+      //...
+    } else if (textArray[0] == '7' || textArray[0] == '8') {
+      textArray.shift();
+      textArray.unshift('(');
+      textArray.unshift('7');
+      textArray.unshift('+');
+    } else if (e.target.value == '') {
+      //...На случай, если происходит удаление контента
+    } else {
+      textArray.unshift('(');
+      textArray.unshift('7');
+      textArray.unshift('+');
+    }
+    e.target.value = textArray.join('');
+
+    if (textArray.length == 2 && (e.target.dataset.keycode != 8 && e.target.dataset.keycode !=  46)) {
+      //...Вторая цифра всегда 7!
+      textArray[1] = '7';
+      textArray.push('(')
+      e.target.value = textArray.join('');
+    }
+
+    if (textArray[3] == '8' || textArray[3] == '7') {
+      //...если человек опечатался. Второй цифрой не может быть 7 или 8.
+      textArray.splice(3,1);
+      e.target.value = textArray.join('');
+    }
+
+    if (textArray.length == 6 && (e.target.dataset.keycode != 8 && e.target.dataset.keycode !=  46)) {
+      textArray.push(')');
+      e.target.value = textArray.join('');
+    }
+
+    if (textArray.length == 9 && (e.target.dataset.keycode != 8 && e.target.dataset.keycode !=  46)) {
+      textArray.push('-');
+      e.target.value = textArray.join('');
+    }
+    if (textArray.length == 12 && (e.target.dataset.keycode != 8 && e.target.dataset.keycode !=  46)) {
+      textArray.push('-');
+      e.target.value = textArray.join('');
+    }
+  }
 }
 
 function myPopup(trigers) {
@@ -314,8 +368,8 @@ document.querySelector('.btn_trig').addEventListener('click', (e) => {
   let timeInterval = 50;
   let timeTimeout = 3000;
 
-  let timeStartText2 = (timeInterval * contentBlockText1.length)*2+timeTimeout+2000;
-  let timeStartText3 = timeStartText2*2;
+  let timeStartText2 = (timeInterval * contentBlockText1.length) * 2 + timeTimeout + 2000;
+  let timeStartText3 = timeStartText2 * 2;
 
   span_2.textContent = '|';
 
@@ -331,11 +385,11 @@ document.querySelector('.btn_trig').addEventListener('click', (e) => {
   }, timeStartText3);
   setTimeout(() => {
     span_2.remove();
-  }, timeStartText2*3);
+  }, timeStartText2 * 3);
 
-  function showText (text) {
+  function showText(text) {
     let counter = 1;
-    let timer = setInterval( () => {
+    let timer = setInterval(() => {
       span_1.textContent = text.slice(0, counter);
       if (counter > text.length) {
         clearInterval(timer);
@@ -349,8 +403,9 @@ document.querySelector('.btn_trig').addEventListener('click', (e) => {
       counter++;
     }, timeInterval);
   }
-  function removeText (text, counter) {
-    let timer = setInterval( () => {
+
+  function removeText(text, counter) {
+    let timer = setInterval(() => {
       span_1.textContent = text.slice(0, counter);
       if (counter < 1) {
         clearInterval(timer);
@@ -370,7 +425,7 @@ myvar = myvar.split('<br>');
 document.querySelector('.block_rows').innerHTML = '';
 
 let counter = 0;
-let timer = setInterval( () => {
+let timer = setInterval(() => {
   if (counter > myvar.length) {
     clearInterval(timer);
   }
